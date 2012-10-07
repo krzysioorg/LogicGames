@@ -1,6 +1,8 @@
 package org.krzysio.games;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author krzysztof
@@ -12,6 +14,28 @@ public class ChannelInfo implements Serializable {
 
 	private String clientID;
 	private String token;
+	
+	private Set<String> groups;
+	
+	public boolean addGroup(String group) {
+		if (groups == null) {
+			groups = new HashSet<>();
+		}
+		
+		return groups.add(group);
+	}
+	
+	public boolean removeGroup(String group) {
+		if (groups != null) {
+			return groups.remove(group);
+		}
+		
+		return false;
+	}
+	
+	public boolean containsGroup(String group) {
+		return groups != null && groups.contains(group);
+	}
 
 	public String getClientID() {
 		return clientID;

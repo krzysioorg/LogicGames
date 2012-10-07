@@ -5,7 +5,9 @@
 %>
 
 <h1>Welcome to Smart Games site!</h1>
+<br id="brTag_for0">
 
+<p>
 <textarea id="mainChat" name="mainChat" rows="15" cols="80" style="width: 60%" 
 			class="tinymce" placeholder="Enter message text">
 </textarea>
