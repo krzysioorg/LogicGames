@@ -9,9 +9,15 @@
 <link type="text/css" href="css/styles.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.8.24.custom.min.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
 
 </head>
 <body>
-	<jsp:include page="jsp/chatPage.jsp"></jsp:include>	
+	<jsp:include page="jsp/errWarnPanels.jsp">
+		<jsp:param value="Tempor_anonymous" name="username"/>
+	</jsp:include>
+	
+	<jsp:include page="jsp/chatPage.jsp"></jsp:include>
 </body>
 </html>
