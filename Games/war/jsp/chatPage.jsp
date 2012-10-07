@@ -16,6 +16,9 @@
 	</tr>
 </table>
 
-<textarea id="elm1" name="elm1" rows="15" cols="80" style="width: 80%" class="tinymce">
-	Some example text
-</textarea>
+<form name="chatMsgForm" action="ingestChatMessage" method="post">
+	<textarea id="elm1" name="elm1" rows="15" cols="80" style="width: 60%" 
+				class="tinymce" placeholder="Enter message text">
+	</textarea>
+	<input type="submit" value="Send">
+</form>
