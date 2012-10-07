@@ -5,6 +5,7 @@
 
 <link type="text/css" href="css/start/jquery-ui-1.8.24.custom.css" rel="stylesheet" />
 <link type="text/css" href="css/styles.css" rel="stylesheet" />
+<script type="text/javascript" src="/_ah/channel/jsapi"></script>
 <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.8.24.custom.min.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
