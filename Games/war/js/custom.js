@@ -59,8 +59,7 @@ function sendMsgToChat(chatId, inputId) {
 		type: 'POST',
 		data: { action     : 'sendMsgToChat',
 				'chatId'   : chatId,
-				'html'     : html,
-				'username' : username
+				'html'     : html
 			},
 		complete: function(resp, textStatus) {
 			if (textStatus == "success") {
