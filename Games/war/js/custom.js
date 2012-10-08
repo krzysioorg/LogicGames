@@ -35,8 +35,8 @@ function showWarnPanelWithTimeout(warnMsg, timeout) {
 	}
 }
 
-function showErrPanelWithTimeout(warnMsg, timeout) {
-	showErrPanel(warnMsg);
+function showErrPanelWithTimeout(errMsg, timeout) {
+	showErrPanel(errMsg);
 	if (timeout > 0) {
 		clearTimeout(errPanelTimeoutHandler);
 		errPanelTimeoutHandler = setTimeout("hideErrPanel();", timeout);
@@ -59,8 +59,7 @@ function sendMsgToChat(chatId, inputId) {
 		type: 'POST',
 		data: { action     : 'sendMsgToChat',
 				'chatId'   : chatId,
-				'html'     : html,
-				'username' : username
+				'html'     : html
 			},
 		complete: function(resp, textStatus) {
 			if (textStatus == "success") {
@@ -80,10 +79,7 @@ function sendMsgToChat(chatId, inputId) {
 }
 
 function handleIncomingMsg(data) {
-	var chatId = data.chatId;
-	var brTag = byId("brTag_for" + chatId);
-	
-	var html = '<div class="ui-widget" chatId="${chatId}">' +
+	var html = '<div class="ui-widget">' +
 					'<div class="ui-crner-all" style="margin-top: 20px; padding: 0 .7em;">' +
 						'<p>' + 
 						'<span class="ui-icon ui-icon-comment" style="float: left; margin-right: .3em;"></span>' +
@@ -94,11 +90,11 @@ function handleIncomingMsg(data) {
 					'</div>' +
 				'</div>';
 				
-	html = html.replace("${item[0]}", data.sender);
+	html = html.replace("${item[0]}", data.username);
 	html = html.replace("${item[1]}", data.date);
-	html = html.replace("${item[2]}", data.htmlMessage);
+	html = html.replace("${item[2]}", data.message);
 	
-	brTag.before(html);
+	byId("brTag_for0").before(html);
 	
 	// ponizsze musialem zastapic powyzszym, bo mi jQuery.tabs sie wymadrzal 
 	// i zmienial uklad DOM wewnatrz zwracanego html-a!
@@ -108,4 +104,47 @@ function handleIncomingMsg(data) {
 //	var newNode = lastNode.clone(true);
 //	$(newNode).find(".htmlToReplace").html(htmlToReplace);
 //	lastNode.after(newNode);
+}
+
+function onOpened() {
+	$.ajax({
+		url: 'ajaxHandler',
+		type: 'POST',
+		data: { action     : 'sayHello',
+				'username' : username
+			},
+		complete: function(resp, textStatus) {
+			if (textStatus == "success") {
+				var result = $.parseJSON(resp.responseText);
+				switch (result.status) {
+					case 'OK':
+						break;
+					default:
+						showErrPanelWithTimeout("There was an error. We are already working on it.", 10000);
+				}
+			} else {
+				showWarnPanelWithTimeout("Connection error. Try again later.", 10000);
+			}
+		}
+	});
+}
+
+function onMessage(msg) {
+	if (!msg || !msg.data) {
+		return;
+	}
+	
+	var data = $.parseJSON(msg.data);
+	var handler = data.handler;
+	var payload = data.payload;
+	
+	if (!handler) {
+		return;
+	}
+	
+	if (handler == 'INFORM') {
+		showNotification(payload);
+	} else if (handler == 'MAIN_CHAT') {
+		handleIncomingMsg(payload);
+	}
 }
