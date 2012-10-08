@@ -5,20 +5,10 @@
 %>
 
 <h1>Welcome to Smart Games site!</h1>
+<br id="brTag_for0">
 
-<table>
-	<tr>
-		<td colspan="2" style="font-weight: bold;">Available Servlets:</td>
-	</tr>
-
-	<tr>
-		<td><a href="quicklists">QuickLists</a></td>
-	</tr>
-</table>
-
-<form name="chatMsgForm" action="ingestChatMessage" method="post">
-	<textarea id="elm1" name="elm1" rows="15" cols="80" style="width: 60%" 
-				class="tinymce" placeholder="Enter message text">
-	</textarea>
-	<input type="submit" value="Send">
-</form>
+<p>
+<textarea id="mainChat" name="mainChat" rows="15" cols="80" style="width: 60%" 
+			class="tinymce" placeholder="Enter message text">
+</textarea>
+<input type="button" value="Send" onclick="sendMsgToChat('', 'mainChat');">

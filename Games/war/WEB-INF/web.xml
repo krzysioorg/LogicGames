@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<servlet>
-		<servlet-name>Games</servlet-name>
-		<servlet-class>org.krzysio.games.GamesServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Games</servlet-name>
-		<url-pattern>/games</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>IngestChatMessageServlet</servlet-name>
-		<servlet-class>org.krzysio.games.servlets.IngestChatMessageServlet</servlet-class>
+		<servlet-name>AjaxHandlerServlet</servlet-name>
+		<servlet-class>org.krzysio.games.servlets.AjaxHandlerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>IngestChatMessageServlet</servlet-name>
-		<url-pattern>/ingestChatMessage</url-pattern>
+		<servlet-name>AjaxHandlerServlet</servlet-name>
+		<url-pattern>/ajaxHandler</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
@@ -29,7 +21,7 @@
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<url-pattern>/_ah/spi/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
