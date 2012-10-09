@@ -55,7 +55,7 @@ function toggleConfPassField() {
 }
 
 $(function() {
-	byId("newUserChkbx").removeAttr("checked");
+	byId("newUser").removeAttr("checked");
 });
 </script>
 </head>
@@ -75,16 +75,16 @@ $(function() {
 	<div style="height: 130px;">
 	<div id="accordion">
 		<div>
-			<form action="/" method="post">
+			<form action="/loginOrRegister" method="post">
 				<fieldset>
-					<input type="text" placeholder="Username" name="a" id="aliasID" required="required" maxlength="50">
-					<input type="checkbox" id="newUserChkbx" style="width: 5px;" onclick="toggleConfPassField();">
-					<label for="newUserChkbx">New user</label>
+					<input type="text" placeholder="Username" name="username" id="aliasID" required="required" maxlength="50">
+					<input type="checkbox" id="newUser" name="newUser" style="width: 5px;" onclick="toggleConfPassField();">
+					<label for="newUser">New user</label>
 					<br>
 					<input type="password" name="pass" placeholder="Password" required="required">
 					<input type="password" name="confpass" placeholder="Confirm password" style="display: none;">
 					<br>
-					<input type="submit" value="Login" style="width: 50px;">
+					<input type="submit" value="Login" style="width: 55px;">
 				</fieldset>
 			</form>
 		</div>
