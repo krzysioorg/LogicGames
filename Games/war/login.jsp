@@ -7,29 +7,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
-	ClientContext clientContext = (ClientContext) session.getAttribute(ClientContext.SESSION_KEY);
-
-	if (clientContext == null) {
-		
-	}
-
-	/*
-	String clientID = "CL_ID_" + System.currentTimeMillis() + "_" + Math.abs(new Random().nextInt());
-	ChannelService channelService = ChannelServiceFactory.getChannelService();
-	String channelToken = channelService.createChannel(clientID);
+	String errMessage = (String) request.getAttribute("ERR_MSG");
+	String username_bak = (String) request.getAttribute("username_bak");
 	
-	String username = (String) request.getSession().getAttribute("username");
-	if (StringUtils.isEmpty(username)) {
-		username = "Anonymous";
+	if (StringUtils.isNotEmpty(errMessage)) {
+		pageContext.setAttribute("errMessage", errMessage);
 	}
 	
-	request.getSession().setAttribute(ClientContext.SESSION_KEY, new ClientContext(username));
-	
-	WebSocketManager.getInstance().addChannelInfo(clientID, channelToken);
-	
-	pageContext.setAttribute("username", username);
-	pageContext.setAttribute("channelToken", channelToken);
-	*/
+	if (StringUtils.isNotEmpty(username_bak)) {
+		pageContext.setAttribute("username_bak", username_bak);
+	}
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -46,7 +33,7 @@ fieldset input {
 
 <script type="text/javascript">
 function toggleConfPassField() {
-	var checked = byId("newUserChkbx").attr("checked");
+	var checked = byId("newUser").attr("checked");
 	if (checked) {
 		byName("confpass").show();
 	} else {
@@ -56,6 +43,10 @@ function toggleConfPassField() {
 
 $(function() {
 	byId("newUser").removeAttr("checked");
+	var errMessage = '${errMessage}';
+	if (errMessage.length > 0) {
+		showErrPanel(errMessage);
+	}
 });
 </script>
 </head>
@@ -77,8 +68,8 @@ $(function() {
 		<div>
 			<form action="/loginOrRegister" method="post">
 				<fieldset>
-					<input type="text" placeholder="Username" name="username" id="aliasID" required="required" maxlength="50">
-					<input type="checkbox" id="newUser" name="newUser" style="width: 5px;" onclick="toggleConfPassField();">
+					<input type="text" placeholder="Username" name="username" id="aliasID" required="required" maxlength="50" value="${username_bak}">
+					<input type="checkbox" id="newUser" name="newUser" style="width: 5px;" onclick="toggleConfPassField();" value="on">
 					<label for="newUser">New user</label>
 					<br>
 					<input type="password" name="pass" placeholder="Password" required="required">
