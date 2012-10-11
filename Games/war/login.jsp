@@ -9,6 +9,7 @@
 <%
 	String errMessage = (String) request.getAttribute("ERR_MSG");
 	String username_bak = (String) request.getAttribute("username_bak");
+	Boolean newUser_bak = (Boolean) request.getAttribute("newUser_bak");
 	
 	if (StringUtils.isNotEmpty(errMessage)) {
 		pageContext.setAttribute("errMessage", errMessage);
@@ -16,6 +17,10 @@
 	
 	if (StringUtils.isNotEmpty(username_bak)) {
 		pageContext.setAttribute("username_bak", username_bak);
+	}
+	
+	if (newUser_bak != null && newUser_bak) {
+		pageContext.setAttribute("newUser_bak", newUser_bak);
 	}
 %>
 
@@ -42,11 +47,20 @@ function toggleConfPassField() {
 }
 
 $(function() {
-	byId("newUser").removeAttr("checked");
 	var errMessage = '${errMessage}';
+	var newUser_bak = '${newUser_bak}';
+	
+	if (newUser_bak && newUser_bak == "true") {
+		byId("newUser").attr("checked", 'checked');
+	} else {
+		byId("newUser").removeAttr("checked");
+	}
+	
 	if (errMessage.length > 0) {
 		showErrPanel(errMessage);
 	}
+	
+	toggleConfPassField();
 });
 </script>
 </head>

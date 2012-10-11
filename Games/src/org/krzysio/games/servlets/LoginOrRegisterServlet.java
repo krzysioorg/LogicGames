@@ -1,8 +1,7 @@
 package org.krzysio.games.servlets;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.krzysio.games.ClientContext;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -27,7 +28,7 @@ public class LoginOrRegisterServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static byte[] SALT = "chfbcUYTzdgneessssffffAAADDDdd987@#$$%MD887".getBytes();
+	private static String SALT = "chfbcUYTzdgneessssffffAAADDDdd987@#$$%MD887";
 	
 	private static Logger logger = Logger.getLogger(LoginOrRegisterServlet.class.getName());
 
@@ -46,11 +47,7 @@ public class LoginOrRegisterServlet extends HttpServlet {
 	
 	private boolean isNewUser(HttpServletRequest request) {
 		String newUser = request.getParameter("newUser");
-		if (newUser == null) {
-			return false;
-		}
-		
-		return newUser.equalsIgnoreCase("on");
+		return newUser != null && newUser.equalsIgnoreCase("on");
 	}
 
 	private String createNewUser(HttpServletRequest request) {
@@ -69,18 +66,45 @@ public class LoginOrRegisterServlet extends HttpServlet {
 		if (StringUtils.isBlank(pass) || !pass.equalsIgnoreCase(confpass)) {
 			request.setAttribute("ERR_MSG", "Incorrect password");
 			request.setAttribute("username_bak", username);
+			request.setAttribute("newUser_bak", Boolean.TRUE);
 			return "/login.jsp";
 		}
 		
 		user = new Entity("User");
+		user.setProperty("username", username);
 		user.setProperty("pass", generatePassHash(pass));
+		user.setProperty("createdAt", new Date());
 		
+		datastore.put(user);
+		logger.log(Level.FINER, "User {} has been created", username);
+		request.getSession().setAttribute(ClientContext.SESSION_KEY, new ClientContext(username));
 		
 		return "/jsp/chatPage.jsp";
 	}
 	
 	private String loginUser(HttpServletRequest request) {
-		return "/login.jsp";
+		String username = request.getParameter("username");
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Entity user = findUser(datastore, username);
+		
+		if (user == null) {
+			request.setAttribute("ERR_MSG", "Entered Username is not correct");
+			return "/login.jsp";
+		}
+		
+		String pass = request.getParameter("pass");
+		pass = generatePassHash(pass);
+		String dbPass = (String) user.getProperty("pass");
+		
+		if (!dbPass.equals(pass)) {
+			request.setAttribute("ERR_MSG", "Incorrect password");
+			request.setAttribute("username_bak", username);
+			return "/login.jsp";
+		}
+		
+		request.getSession().setAttribute(ClientContext.SESSION_KEY, new ClientContext(username));
+		
+		return "/jsp/chatPage.jsp";
 	}
 	
 	private Entity findUser(DatastoreService datastore, String username) {
@@ -91,16 +115,7 @@ public class LoginOrRegisterServlet extends HttpServlet {
 	}
 	
 	private String generatePassHash(String pass) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA1");
-			md.update(SALT);
-			md.update(pass.getBytes());
-			
-			return md.toString();
-		} catch (NoSuchAlgorithmException e) {
-			logger.log(Level.WARNING, "Can't generate password hash", e);
-			return "";
-		}
+		return DigestUtils.sha1Hex(SALT + pass);
 	}
 	
 }
