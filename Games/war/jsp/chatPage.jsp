@@ -42,7 +42,9 @@
 			showErrPanelWithTimeout(errObj.code + ": "
 					+ errObj.description, 20000);
 		};
-		socket.onclose = showWarnPanel("WebSocket connection lost.");
+		socket.onclose = function() {
+			initSocket();
+		};
 	}
 
 	initSocket();

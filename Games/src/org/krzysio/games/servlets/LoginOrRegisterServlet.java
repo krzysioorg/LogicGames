@@ -34,15 +34,13 @@ public class LoginOrRegisterServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-		String continuePage;
-		
 		if (isNewUser(request)) {
-			continuePage = createNewUser(request);
+			createNewUser(request);
 		} else {
-			continuePage = loginUser(request);
+			loginUser(request);
 		}
 		
-		getServletContext().getRequestDispatcher(continuePage).forward(request, resp);
+		resp.sendRedirect("/");
 	}
 	
 	private boolean isNewUser(HttpServletRequest request) {
@@ -50,14 +48,14 @@ public class LoginOrRegisterServlet extends HttpServlet {
 		return newUser != null && newUser.equalsIgnoreCase("on");
 	}
 
-	private String createNewUser(HttpServletRequest request) {
+	private void createNewUser(HttpServletRequest request) {
 		String username = request.getParameter("username");
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity user = findUser(datastore, username);
 		
 		if (user != null) {
 			request.setAttribute("ERR_MSG", "Entered Username is not allowed");
-			return "/login.jsp";
+			return;
 		}
 		
 		String pass = request.getParameter("pass");
@@ -67,7 +65,7 @@ public class LoginOrRegisterServlet extends HttpServlet {
 			request.setAttribute("ERR_MSG", "Incorrect password");
 			request.setAttribute("username_bak", username);
 			request.setAttribute("newUser_bak", Boolean.TRUE);
-			return "/login.jsp";
+			return;
 		}
 		
 		user = new Entity("User");
@@ -79,17 +77,17 @@ public class LoginOrRegisterServlet extends HttpServlet {
 		logger.log(Level.FINER, "User {} has been created", username);
 		request.getSession().setAttribute(ClientContext.SESSION_KEY, new ClientContext(username));
 		
-		return "/jsp/chatPage.jsp";
+		return;
 	}
 	
-	private String loginUser(HttpServletRequest request) {
+	private void loginUser(HttpServletRequest request) {
 		String username = request.getParameter("username");
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity user = findUser(datastore, username);
 		
 		if (user == null) {
 			request.setAttribute("ERR_MSG", "Entered Username is not correct");
-			return "/login.jsp";
+			return;
 		}
 		
 		String pass = request.getParameter("pass");
@@ -99,12 +97,12 @@ public class LoginOrRegisterServlet extends HttpServlet {
 		if (!dbPass.equals(pass)) {
 			request.setAttribute("ERR_MSG", "Incorrect password");
 			request.setAttribute("username_bak", username);
-			return "/login.jsp";
+			return;
 		}
 		
 		request.getSession().setAttribute(ClientContext.SESSION_KEY, new ClientContext(username));
 		
-		return "/jsp/chatPage.jsp";
+		return;
 	}
 	
 	private Entity findUser(DatastoreService datastore, String username) {

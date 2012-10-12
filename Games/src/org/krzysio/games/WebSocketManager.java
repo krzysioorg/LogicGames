@@ -73,7 +73,7 @@ public class WebSocketManager {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String json = objectMapper.writeValueAsString(map);
 			ChannelService channelService = ChannelServiceFactory.getChannelService();
-			
+
 			for (String clientId : clientIds) {
 				channelService.sendMessage(new ChannelMessage(clientId, json));
 			}
