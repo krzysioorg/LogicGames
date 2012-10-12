@@ -1,14 +1,17 @@
+<%@page import="org.krzysio.games.ClientContext"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
-	//ChannelServiceFactory.getChannelService();
+	ClientContext clientContext = (ClientContext) session.getAttribute(ClientContext.SESSION_KEY);
+	pageContext.setAttribute("username", clientContext.getUsername());
+	pageContext.setAttribute("channelToken", clientContext.getChannelToken());
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<jsp:include page="jsp/headerSection.jsp"></jsp:include>
+	<jsp:include page="headerSection.jsp"></jsp:include>
 </head>
 
 <body>
