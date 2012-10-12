@@ -32,6 +32,7 @@
 
 <body>
 	<jsp:include page="jsp/errWarnPanels.jsp">
+		Conflict change
 		<jsp:param value="${username}" name="username"/>
 	</jsp:include>
 	
