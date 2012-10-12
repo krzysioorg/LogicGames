@@ -40,7 +40,7 @@ public class AjaxHandlerServlet extends HttpServlet {
 
 		} else if (action.equals("sendMsgToChat")) {
 			String htmlMsg = req.getParameter("html");
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 			
 			MainChatMessage mainChatMessage = new MainChatMessage();
 			mainChatMessage.setUsername(clientContext.getUsername());
@@ -51,7 +51,7 @@ public class AjaxHandlerServlet extends HttpServlet {
 			
 		} else if (action.equals("sayHello")) {
 			String username = req.getParameter("username");
-			WebSocketManager.getInstance().broadcast(String.format("User %s has joined", username));
+			WebSocketManager.getInstance().broadcast(String.format("User <strong>%s</strong> has joined", username));
 		}
 		
 		
